@@ -12,6 +12,12 @@ generated from a set of parameters, a deterministic and secure RSA key pair gene
 * https://crypto.stackexchange.com/a/24517
 
 
+Implement Generating RSA Key pair
+
+* https://github.com/Biggy54321/crypto-rsa-C/blob/master/rsa_key_gen.c
+* https://stackoverflow.com/questions/18264314/generating-a-public-private-key-pair-using-an-initial-key#answer-18266970
+
+
 A TPM also uses something that is not easily available to an ordinary program: an internal secret, unique to the TPM device
 
 Make the process slow, so that guessing attacks against the secrets that seed the D-RSA process could not thrive. Also make it so no parallel machines or precomputation databases could be used.
@@ -90,3 +96,62 @@ confusion string and on the number of iterations
 **randgen** - evaluating the time taken to set up the described pseudo-random generator for diferent input parameters. rsagen using the stdin as random byte source. This allows you to experiment your application with many different randomness sources (e.g. /dev/urandom or other) just by redirecting the application's stdin. 
 
 **rsagen** - uses it to deterministically to generate an RSA key pair.
+
+
+
+# Links
+
+* https://crypto.stackexchange.com/questions/1662/how-can-one-securely-generate-an-asymmetric-key-pair-from-a-short-passphrase/1665#1665
+* https://github.com/joekir/deterministics
+* https://crypto.stackexchange.com/a/24517
+* https://github.com/Biggy54321/crypto-rsa-C/blob/master/rsa_key_gen.c
+* https://stackoverflow.com/questions/18264314/generating-a-public-private-key-pair-using-an-initial-key#answer-18266970
+* https://www.schneier.com/academic/fortuna/
+
+* https://github.com/pycrypto/pycrypto/tree/master/lib/Crypto/Random/Fortuna
+
+# Code snippets
+
+## Fortuna python implementation
+https://www.researchgate.net/publication/215858122_Fortuna_Cryptographically_Secure_Pseudo-Random_Number_Generation_In_Software_And_Hardware
+
+Fortuna possible improvments found in 2015 - https://eprint.iacr.org/2014/167
+
+python code - https://github.com/pycrypto/pycrypto/tree/master/lib/Crypto/Random/Fortuna
+
+## Generating a RSA Key deterministically in python3
+
+The PRNG (pseudo-random number generator) could be changed to use another PRNG
+
+```
+from Crypto.PublicKey import RSA
+from Crypto.Hash import HMAC
+from struct import pack
+
+# The first key could also be read from a file
+first_key = RSA.generate(2048)
+
+# Here we encode the first key into bytes and in a platform-independent format.
+# The actual format is not important (PKCS#1 in this case), but it must
+# include the private key.
+encoded_first_key = first_key.exportKey('DER')
+
+seed_128 = HMAC.new(encoded_first_key + b"Application: 2nd key derivation").digest()
+
+class PRNG(object):
+
+  def __init__(self, seed):
+    self.index = 0
+    self.seed = seed
+    self.buffer = b""
+
+  def __call__(self, n):
+    while len(self.buffer) < n:
+        self.buffer += HMAC.new(self.seed +
+                                pack("<I", self.index)).digest()
+        self.index += 1
+    result, self.buffer = self.buffer[:n], self.buffer[n:]
+    return result
+
+second_key = RSA.generate(2048, randfunc=PRNG(seed_128))
+```
