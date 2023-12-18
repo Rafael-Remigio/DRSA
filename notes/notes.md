@@ -155,3 +155,20 @@ class PRNG(object):
 
 second_key = RSA.generate(2048, randfunc=PRNG(seed_128))
 ```
+
+# Pseudo Random Generator
+
+
+If a user or application asks for random data, the generator runs its
+algorithm and generates pseudorandom data. Now suppose an attacker
+manages to compromise the generator’s state after the completion of the
+request. It would be nice if this would not compromise the previous results
+the generator gave. Therefore, after every request we generate an extra 256
+bits of pseudorandom data and use that as the new key for the block cipher.
+We can then forget the old key, thereby eliminating any possibility of leaking
+information about old requests.
+
+To ensure that the data we generate will be statistically random, we can-
+not generate too much data at one time. After all, in purely random data
+there can be repeated block values, but the output of counter mode never
+contains repeated block values.
