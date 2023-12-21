@@ -4,7 +4,7 @@ class HashDRBG:
     def __init__(self, seed):
         self.initial_seed = seed
         self.state = hashlib.sha256(seed).digest()
-        self.counter = 1  # Inicializa o contador
+        self.counter = 1 
         self.generated_bytes = 0
 
     def generate(self, num_bytes, reseed_byte_limit):
@@ -16,7 +16,7 @@ class HashDRBG:
             self.counter += 1
             self.generated_bytes += 1
 
-            # Se gerou y bytes, chama a função reseed
+
             if self.generated_bytes % reseed_byte_limit == 0:
                 self.reseed()
 
