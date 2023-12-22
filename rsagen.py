@@ -24,7 +24,22 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
+
+
     if (args.password == None) or (args.confusion == None) or (args.iterations == None):
         parser.print_help()
         sys.exit(1)
 
+    password = args.password
+    confusion_string = args.confusion
+    iterations = args.iterations
+
+    # encode confusion string into bytes
+    confusion_bytes = confusion_string.encode('utf8')
+
+    # Generate key from password
+    key_generator = KeyGenerator()
+    argon_key = key_generator.generate_key_from_password(password=password,confusion_bytes=confusion_bytes,number_iterations=iterations)
+    
+
+    print("Key: ", argon_key)

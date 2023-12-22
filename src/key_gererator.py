@@ -26,5 +26,5 @@ class KeyGenerator():
         # b'confusion\x03\x00\x00\x00\x00\x00\x00\x00'
         salt = confusion_bytes +  number_iterations.to_bytes(length=8,byteorder='little')
 
-        return self.password_hasher.hash(password=password,salt=salt).encode("ascii")
+        return self.password_hasher.hash(password=password,salt=salt)
     
