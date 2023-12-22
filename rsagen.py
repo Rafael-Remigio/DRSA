@@ -3,8 +3,9 @@
 from src.key_gererator import KeyGenerator
 import argparse
 import sys
-
-
+import base64
+from src.hash_drbg import HashDRBG
+from Crypto.PublicKey import RSA
 
 if __name__ == "__main__":
     
@@ -42,4 +43,29 @@ if __name__ == "__main__":
     argon_key = key_generator.generate_key_from_password(password=password,confusion_bytes=confusion_bytes,number_iterations=iterations)
     
 
-    print("Key: ", argon_key)
+    # Split the argol byte key and retrieve just the hash. remove the salt and other stuff. 
+    base_seed = argon_key.split("$")[-1]
+
+    # Decode the key/seed (i need to add the = because of the base64 padding). 
+    base_seed_bytes = base64.b64decode(base_seed + "=")
+
+    pnrg = HashDRBG(base_seed_bytes)
+
+
+    count = 0
+    len_confusion_bytes = len(confusion_bytes)
+    while (count < iterations):
+
+        generated_bytes = pnrg.generate(len_confusion_bytes)
+
+        if generated_bytes == confusion_bytes:
+
+            count += 1
+
+            new_seed = pnrg.generate(len(base_seed_bytes))
+
+            pnrg = HashDRBG(new_seed)
+
+rsa_key_pair = RSA.generate(2048, randfunc=pnrg)
+
+print(rsa_key_pair.export_key())

@@ -14,7 +14,7 @@ class KeyGenerator():
 
     def __init__(self):
         # Initialize the PasswordHasher
-        self.password_hasher = PasswordHasher(hash_len=32)
+        self.password_hasher = PasswordHasher(hash_len=32,encoding="ascii")
 
         return
 
