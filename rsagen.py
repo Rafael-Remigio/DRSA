@@ -22,8 +22,8 @@ if __name__ == "__main__":
     parser.add_argument('-c', '--confusion',help="Confusion String used for iterations on PRNG",type=str)
     parser.add_argument('-i', '--iterations',help="Number of iterations that the PRNG needs to generate confusion",type=int)
 
-    parser.add_argument('-o', '--private',help="Private key output file",type=str)
-    parser.add_argument('-f', '--public',help="Public key output file",type=str)
+    parser.add_argument('-o', '--private',help="Private key output file - PEM format",type=str)
+    parser.add_argument('-f', '--public',help="Public key output file - PEM format",type=str)
 
     args = parser.parse_args()
 
