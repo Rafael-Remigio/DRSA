@@ -22,8 +22,10 @@ if __name__ == "__main__":
     parser.add_argument('-c', '--confusion',help="Confusion String used for iterations on PRNG",type=str)
     parser.add_argument('-i', '--iterations',help="Number of iterations that the PRNG needs to generate confusion",type=int)
 
-    args = parser.parse_args()
+    parser.add_argument('-o', '--private',help="Private key output file",type=str)
+    parser.add_argument('-f', '--public',help="Public key output file",type=str)
 
+    args = parser.parse_args()
 
 
 
@@ -66,6 +68,15 @@ if __name__ == "__main__":
 
             pnrg = HashDRBG(new_seed)
 
-rsa_key_pair = RSA.generate(2048, randfunc=pnrg)
+rsa_key_pair = RSA.generate(2048, randfunc=pnrg,)
 
-print(rsa_key_pair.export_key())
+pv_key_string = rsa_key_pair.exportKey()
+pb_key_string = rsa_key_pair.public_key().exportKey()
+
+if (args.private != None):
+    with open (args.private , "w") as prv_file:
+        print("{}".format(pv_key_string.decode()), file=prv_file)
+
+if (args.public != None):
+    with open (args.public , "w") as pb_file:
+        print("{}".format(pb_key_string.decode()), file=pb_file)
