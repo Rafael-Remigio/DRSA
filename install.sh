@@ -8,3 +8,7 @@ pip install -r requirments.txt
 
 echo "Removing created files"
 rm /tmp/argon2_cffi-23.1.0-py3-none-any.whl 
+
+# here because pycrypto got discontinued for python 3.8
+pip uninstall pycrypto
+pip install pycryptodome

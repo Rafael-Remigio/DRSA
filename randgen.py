@@ -6,7 +6,7 @@ import numpy as np
 
 # args
 if len(sys.argv) < 4:
-    print("Uso: python3 seu_script.py <confusion_string_1> <confusion_string_2> ... <num_iterations> <n>")
+    print("Usage: python3 randgen.py <confusion_string_1> <confusion_string_2> ... <num_iterations> <n>")
     sys.exit(1)
 
 # retrieving confusion strings

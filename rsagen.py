@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
                     prog='rsagen',
-                    description='Generate deterministic RSA Key pair from a password and a confusion string.',
+                    description='Generate deterministic RSA Key pair from a password a confusion string and the nunber of iterations',
                     epilog='')
     
 
@@ -68,15 +68,15 @@ if __name__ == "__main__":
 
             pnrg = HashDRBG(new_seed)
 
-rsa_key_pair = RSA.generate(2048, randfunc=pnrg,)
+    rsa_key_pair = RSA.generate(2048, randfunc=pnrg,)
 
-pv_key_string = rsa_key_pair.exportKey()
-pb_key_string = rsa_key_pair.public_key().exportKey()
+    pv_key_string = rsa_key_pair.exportKey()
+    pb_key_string = rsa_key_pair.public_key().exportKey()
 
-if (args.private != None):
-    with open (args.private , "w") as prv_file:
-        print("{}".format(pv_key_string.decode()), file=prv_file)
+    if (args.private != None):
+        with open (args.private , "w") as prv_file:
+            print("{}".format(pv_key_string.decode()), file=prv_file)
 
-if (args.public != None):
-    with open (args.public , "w") as pb_file:
-        print("{}".format(pb_key_string.decode()), file=pb_file)
+    if (args.public != None):
+        with open (args.public , "w") as pb_file:
+            print("{}".format(pb_key_string.decode()), file=pb_file)
