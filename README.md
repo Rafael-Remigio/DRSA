@@ -13,23 +13,23 @@ Deterministic RSA key generation (D-RSA)
 
 The generation of RSA key pairs traditionally involves random generation within the module's dimension. However, an alternative method involves deterministic key pair generation, where a fixed set of parameters consistently generates the same key pair. This deterministic approach ensures predictability in RSA key pair generation.
 
-The \textit{rsagen} tool developed in the scope of this project enables deterministic RSA key pair generation. 3 specific parameters are used to set up the generator: a password, a confusion string, and an iteration count. These ensure the setup of the randomness source used for the RSA key pair generation. Notably, it's crucial to ensure that the setup of a randomness source for the RSA key pair generator is time-consuming to enhance security.
+The **rsagen** tool developed in the scope of this project enables deterministic RSA key pair generation. 3 specific parameters are used to set up the generator: a password, a confusion string, and an iteration count. These ensure the setup of the randomness source used for the RSA key pair generation. Notably, it's crucial to ensure that the setup of a randomness source for the RSA key pair generator is time-consuming to enhance security.
 
-The \textit{randgen} tool evaluates the setup time of the pseudo-random generator mentioned above, focusing on different input parameters to determine their impact on the generation process.
+The **randgen** tool evaluates the setup time of the pseudo-random generator mentioned above, focusing on different input parameters to determine their impact on the generation process.
 
 ## rsagen
 
 
 ### Password based key generation
 
-We employ Argon2 for password-based key derivation. This cryptographic method was selected as the winner in the Password Hashing Competition of 2013, aimed at finding new recommended standards for password hash functions.\cite{phc}\cite{argonGithub}
+We employ Argon2 for password-based key derivation. This cryptographic method was selected as the winner in the Password Hashing Competition of 2013, aimed at finding new recommended standards for password hash functions.
 
-Argon2 stands out for its dual constraints: it is both compute-bound and memory-bound. This characteristic ensures that achieving an equivalent unlock time for users results in a significantly decelerated pace for password cracking attempts. Unlike PBKDF2, Argon2 restricts an attacker from running numerous instances concurrently on a GPU due to memory constraints. Consequently, achieving the same unlock duration for users implies that password cracking becomes exponentially slower compared to PBKDF2 \cite{cryptography1020010}. This attribute aligns perfectly with the fundamental objective of this project. 
+Argon2 stands out for its dual constraints: it is both compute-bound and memory-bound. This characteristic ensures that achieving an equivalent unlock time for users results in a significantly decelerated pace for password cracking attempts. Unlike PBKDF2, Argon2 restricts an attacker from running numerous instances concurrently on a GPU due to memory constraints. Consequently, achieving the same unlock duration for users implies that password cracking becomes exponentially slower compared to PBKDF2. This attribute aligns perfectly with the fundamental objective of this project. 
 
 
 ### Pseudo random number generator
 
-In adherence to NIST standards for Cryptographically Secure Pseudo Random Number Generation (CSPRNG), our implementation aligns with a version of Hash_DRBG, as specified in NIST SP 800-90A. \cite{hashDRGB}
+In adherence to NIST standards for Cryptographically Secure Pseudo Random Number Generation (CSPRNG), our implementation aligns with a version of Hash_DRBG, as specified in NIST SP 800-90A.
 
 This generator orchestrates the production of random bits by applying a hash function iteratively to an initial seed. The Hash_DRBG functions across three primary phases:
 
